@@ -23,7 +23,7 @@ const Contacts = [
     image: require("../../assets/images/femme2.jpg"),
     name: "Corine",
     date: "10:16",
-    message: "Okay cc, Have a nice day",
+    message: "Okay cc, thank. Have a nice day",
     active: true
   },
   {

@@ -2,7 +2,8 @@ import { Dimensions, StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
+    flex: 1,
   },
   // Conversation Hearder section
   conversationHeader: {
@@ -55,7 +56,65 @@ const styles = StyleSheet.create({
   },
   // Conversation content section
   conversationContent: {
-    height: Dimensions.get("screen").height - 80
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  messageContainerReceived: {
+    width: Dimensions.get("screen").width,
+    paddingHorizontal: 20,
+    flexDirection: "row",
+    alignItems: "flex-end",
+    marginBottom: 25,
+    paddingTop: 10
+  },
+  messageContainerSended: {
+    width: Dimensions.get("screen").width,
+    paddingHorizontal: 20,
+    flexDirection: "row-reverse",
+    justifyContent: "flex-start",
+    alignItems: "flex-end",
+    marginBottom: 25,
+    paddingTop: 10
+  },
+  messageImage: {
+    width: 30,
+    height: 30,
+    borderRadius: 100
+  },
+  messageCard: {
+    position: "relative",
+    marginLeft: 10,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
+    backgroundColor: "#f6f6f6",
+    padding: 10,
+    minWidth: 100,
+    maxWidth: Dimensions.get("screen").width - 80
+  },
+  messageCardSended: {
+    marginRight: 10,
+    borderBottomLeftRadius: 10,
+    backgroundColor: "#7400db",
+  },
+  messageText: {
+    fontSize: 14,
+    fontFamily: "Poppins-Regular"
+  },
+  messageTextSended: {
+    color: "#fff"
+  },  
+  messageDate: {
+    position: "absolute",
+    bottom: -25,
+    right: 0,
+    fontSize: 12,
+    fontFamily: "Poppins-Regular",
+    textAlignVertical: "bottom",
+    color: "#828282"
+  },
+  messageDateSended: {
+    left: 0,
   },
   // Message Editor section
   messageEditor: {
@@ -78,11 +137,11 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Medium",
     paddingVertical: 10,
     paddingHorizontal: 20,
-    paddingRight: 70 
+    paddingRight: 80 
   },
   messageEditorIconSecond: {
     position: "absolute",
-    right: 50,
+    right: 60,
     bottom: 10
   },
   messageEditorIconFirst: {

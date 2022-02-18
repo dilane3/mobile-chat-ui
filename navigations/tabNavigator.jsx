@@ -6,15 +6,19 @@ import TabBar from '../components/navigations/tabBar'
 import HeaderBar from '../components/navigations/headerbar'
 import { ChatStackNavigator } from './stackNavigator'
 import MessageEditor from '../components/chat/messageEditor'
+import { useContext } from 'react'
+import navigationContext from '../data-manager/context/navigationContext'
 
 const Tab = createBottomTabNavigator()
 
 const TabNavigator = () => {
+  const { activeScreen } = useContext(navigationContext)
+
   return (
     <Tab.Navigator
       initialRouteName="Chat" 
       backBehavior="history"
-      tabBar={props => <MessageEditor />}
+      tabBar={props => activeScreen ? <MessageEditor /> : <TabBar {...props} />}
     >
       <Tab.Screen 
         name="Home"

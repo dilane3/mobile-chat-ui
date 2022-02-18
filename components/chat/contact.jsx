@@ -1,17 +1,23 @@
 import { Image, View, Text, TouchableOpacity } from "react-native"
 import styles from "../../screens/chat/style"
+import { useContext } from "react"
+import navigationContext from "../../data-manager/context/navigationContext"
 
 const Contact = ({ data, navigation }) => {
+  const { changeActiveScreen } = useContext(navigationContext)
+
+  const handlePress = () => {
+    changeActiveScreen("Chat")
+    
+    navigation.navigate("Messages")
+  }
+
   const {
     image,
     name,
     date,
     message
   } = data
-
-  const handlePress = () => {
-    navigation.navigate("Messages")
-  }
   
   return (
     <TouchableOpacity activeOpacity={.8} style={styles.contact} onPress={handlePress}>
