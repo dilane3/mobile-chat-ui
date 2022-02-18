@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import TabNavigator from './navigations/tabNavigator';
 import { useFonts } from 'expo-font'
+import navigationContext from './data-manager/context/navigationContext';
 
 export default function App() {
   const [fontLoaded] = useFonts({
@@ -12,11 +13,23 @@ export default function App() {
     "Poppins-Medium": require("./assets/fonts/Poppins-Medium.ttf")
   })
 
-  return (
-    <NavigationContainer>
-      <TabNavigator />
+  const [activeScreen, setActiveScreen] = useState(null)
 
-      <StatusBar style='auto' />
-    </NavigationContainer>
+  const navigationContextValue = {
+    activeScreen,
+    changeActiveScreen: (screenname) => setActiveScreen(screenname)
+  }
+
+  return (
+    <navigationContext.Provider value={navigationContextValue}>
+      <NavigationContainer>
+
+        {
+          fontLoaded ? <TabNavigator />:null
+        }
+
+        <StatusBar style='auto' />
+      </NavigationContainer>
+    </navigationContext.Provider>
   );
 }

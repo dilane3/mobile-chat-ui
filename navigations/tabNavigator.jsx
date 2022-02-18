@@ -5,15 +5,16 @@ import ProfilScreen from '../screens/profil/profil'
 import TabBar from '../components/navigations/tabBar'
 import HeaderBar from '../components/navigations/headerbar'
 import { ChatStackNavigator } from './stackNavigator'
+import MessageEditor from '../components/chat/messageEditor'
 
 const Tab = createBottomTabNavigator()
 
 const TabNavigator = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Home" 
+      initialRouteName="Chat" 
       backBehavior="history"
-      tabBar={props => <TabBar {...props} />}
+      tabBar={props => <MessageEditor />}
     >
       <Tab.Screen 
         name="Home"
