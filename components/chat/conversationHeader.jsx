@@ -3,10 +3,12 @@ import { Ionicons } from '@expo/vector-icons'
 import styles from "../../screens/messages/style"
 import { useContext, useEffect } from "react"
 import navigationContext from "../../data-manager/context/navigationContext"
+import imageContext from "../../data-manager/context/imageContext"
 
 const ConversationHeader = ({ navigation, data }) => {
   // Get data from global state
   const { changeActiveScreen } = useContext(navigationContext)
+  const { image: globalImage } = useContext(imageContext)
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
@@ -40,7 +42,7 @@ const ConversationHeader = ({ navigation, data }) => {
       </TouchableOpacity>
 
       <View style={styles.conversationInfo}>
-        <Image style={styles.conversationImage} source={image} />
+        <Image style={styles.conversationImage} source={globalImage ? {uri: globalImage}:image} />
       
         <View style={styles.conversationInfoTop}>
           <Text 

@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import TabNavigator from './navigations/tabNavigator';
 import { useFonts } from 'expo-font'
 import navigationContext from './data-manager/context/navigationContext';
+import imageContext from './data-manager/context/imageContext';
 import { useState } from 'react';
 
 export default function App() {
@@ -15,22 +16,30 @@ export default function App() {
   })
 
   const [activeScreen, setActiveScreen] = useState(null)
+  const [image, setImage] = useState(null)
 
   const navigationContextValue = {
     activeScreen,
     changeActiveScreen: (screenname) => setActiveScreen(screenname)
   }
 
+  const imageContextValue = {
+    image,
+    changeImage: (image) => setImage(image)
+  }
+
   return (
     <navigationContext.Provider value={navigationContextValue}>
-      <NavigationContainer>
+      <imageContext.Provider value={imageContextValue}>
+        <NavigationContainer>
 
-        {
-          fontLoaded ? <TabNavigator />:null
-        }
+          {
+            fontLoaded ? <TabNavigator />:null
+          }
 
-        <StatusBar style='auto' />
-      </NavigationContainer>
+          <StatusBar style='auto' />
+        </NavigationContainer>
+      </imageContext.Provider>
     </navigationContext.Provider>
   );
 }

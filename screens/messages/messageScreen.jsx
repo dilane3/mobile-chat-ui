@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar"
-import { FlatList, useWindowDimensions, View } from "react-native"
+import { FlatList, Image, View } from "react-native"
 import ConversationHeader from "../../components/chat/conversationHeader"
 import Message from "../../components/chat/message"
 import styles from "./style"
@@ -71,8 +71,6 @@ const Messages = {
 }
 
 const MessageScreen = ({ navigation }) => {
-  const { height: screenHeight } = useWindowDimensions()
-
   return (
     <View style={styles.container}>
       <ConversationHeader navigation={navigation} data={Messages.contact} />
@@ -80,7 +78,7 @@ const MessageScreen = ({ navigation }) => {
       <View style={{...styles.conversationContent}}>
         <FlatList
           data={Messages.messages}
-          keyExtractor={({index}) => index}
+          keyExtractor={(item, index) => index}
           renderItem={({item}) => {
             return <Message status={item.status} data={item} />
           }}
