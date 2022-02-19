@@ -4,6 +4,7 @@ import TabNavigator from './navigations/tabNavigator';
 import { useFonts } from 'expo-font'
 import navigationContext from './data-manager/context/navigationContext';
 import imageContext from './data-manager/context/imageContext';
+import messageContext from './data-manager/context/messageContext';
 import { useState } from 'react';
 
 export default function App() {
@@ -17,6 +18,27 @@ export default function App() {
 
   const [activeScreen, setActiveScreen] = useState(null)
   const [image, setImage] = useState(null)
+  const [messages, setMessages] = useState([])
+
+  const handleAddMessage = (value, image) => {
+    const id = messages.length === 0 ? 1:messages[messages.length-1].id+1
+    const date = new Date()
+
+    const newMessage = {
+      id,
+      image: require("./assets/images/montagne2.jpg"),
+      text: value,
+      date: `${date.getHours()}:${date.getMinutes()}`,
+      status: "sended",
+      images: image ? [image]:null
+    }
+
+    const messagesClone = [...messages]
+
+    messagesClone.push(newMessage)
+
+    setMessages(messagesClone)
+  }
 
   const navigationContextValue = {
     activeScreen,
@@ -28,17 +50,24 @@ export default function App() {
     changeImage: (image) => setImage(image)
   }
 
+  const messageContextValue = {
+    messages,
+    addMessage: (value, image) => handleAddMessage(value, image)
+  }
+
   return (
     <navigationContext.Provider value={navigationContextValue}>
       <imageContext.Provider value={imageContextValue}>
-        <NavigationContainer>
+        <messageContext.Provider value={messageContextValue}>
+          <NavigationContainer>
 
-          {
-            fontLoaded ? <TabNavigator />:null
-          }
+            {
+              fontLoaded ? <TabNavigator />:null
+            }
 
-          <StatusBar style='auto' />
-        </NavigationContainer>
+            <StatusBar style='auto' />
+          </NavigationContainer>
+        </messageContext.Provider>
       </imageContext.Provider>
     </navigationContext.Provider>
   );

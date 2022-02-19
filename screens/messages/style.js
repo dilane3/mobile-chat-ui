@@ -101,6 +101,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Poppins-Regular"
   },
+  messageImageContent: {
+    width: Dimensions.get("screen").width - 100,
+    height: 200,
+    borderRadius: 10,
+    marginTop: 10
+  },
   messageTextSended: {
     color: "#fff"
   },  
@@ -137,17 +143,27 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Medium",
     paddingVertical: 10,
     paddingHorizontal: 20,
-    paddingRight: 80 
+    paddingRight: 100 
   },
   messageEditorIconSecond: {
     position: "absolute",
-    right: 60,
-    bottom: 10
+    right: 50,
+    bottom: 0,
+    height: 50,
+    width: 40,
+    textAlignVertical: "center",
+    textAlign: "center",
+    zIndex: 5
   },
   messageEditorIconFirst: {
     position: "absolute",
-    right: 20,
-    bottom: 10
+    right: 10,
+    bottom: 0,
+    height: 50,
+    width: 40,
+    textAlignVertical: "center",
+    textAlign: "center",
+    zIndex: 5
   }
 })
 

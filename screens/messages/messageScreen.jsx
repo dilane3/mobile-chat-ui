@@ -1,7 +1,9 @@
 import { StatusBar } from "expo-status-bar"
+import { useContext, useState } from "react"
 import { FlatList, Image, View } from "react-native"
 import ConversationHeader from "../../components/chat/conversationHeader"
 import Message from "../../components/chat/message"
+import messageContext from "../../data-manager/context/messageContext"
 import styles from "./style"
 
 const Messages = {
@@ -16,7 +18,10 @@ const Messages = {
       image: require("../../assets/images/femme2.jpg"),
       text: "Hello Dilane, how are you ?",
       date: "09:40",
-      status: "received"
+      status: "received",
+      images: [
+        require("../../assets/images/oeuf.jpg")
+      ]
     },
     {
       id: 2,
@@ -71,13 +76,15 @@ const Messages = {
 }
 
 const MessageScreen = ({ navigation }) => {
+  const { messages } = useContext(messageContext)
+  
   return (
     <View style={styles.container}>
       <ConversationHeader navigation={navigation} data={Messages.contact} />
 
       <View style={{...styles.conversationContent}}>
         <FlatList
-          data={Messages.messages}
+          data={messages}
           keyExtractor={(item, index) => index}
           renderItem={({item}) => {
             return <Message status={item.status} data={item} />

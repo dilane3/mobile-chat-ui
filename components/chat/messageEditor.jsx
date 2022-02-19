@@ -4,13 +4,16 @@ import { Ionicons } from '@expo/vector-icons'
 import { useContext, useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
 import imageContext from '../../data-manager/context/imageContext'
+import messageContext from '../../data-manager/context/messageContext'
 
 const MessageEditor = () => {
   // Set local state
   const [message, setMessage] = useState("")
+  const [image, setImage] = useState(null)
 
   // Get data from global state
-  const { changeImage } = useContext(imageContext)
+  // const { changeImage } = useContext(imageContext)
+  const { addMessage } = useContext(messageContext)
 
   const ChangeIcon = () => {
     if (message.length > 0) {
@@ -18,6 +21,15 @@ const MessageEditor = () => {
     }
 
     return "mic-sharp"
+  }
+
+  const handleSendMessage = () => {
+    if (message.length > 0) {
+      addMessage(message, image)
+
+      setMessage("")
+      setImage(null)
+    }
   }
 
   const pickImage = async () => {
@@ -32,7 +44,7 @@ const MessageEditor = () => {
     console.log(result);
 
     if (!result.cancelled) {
-      changeImage(result.uri);
+      setImage(result.uri);
     }
   };
 
@@ -52,7 +64,8 @@ const MessageEditor = () => {
         style={styles.messageEditorIconFirst} 
         name={ChangeIcon()} 
         size={25} 
-        color="#fff" 
+        color="#fff"
+        onPress={handleSendMessage} 
       />
       <Ionicons 
         style={styles.messageEditorIconSecond} 

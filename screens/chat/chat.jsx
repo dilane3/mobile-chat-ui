@@ -2,9 +2,11 @@ import { Text, View, TextInput, Image, ScrollView, FlatList } from "react-native
 import { Ionicons } from '@expo/vector-icons'
 import styles from "./style"
 import Contact from "../../components/chat/contact"
+import { useEffect } from "react"
+import * as Contacts from 'expo-contacts'
 
 // Data
-const Contacts = [
+const CONTACTS = [
   {
     image: require("../../assets/images/homme2.jpg"),
     name: "Dan",
@@ -64,6 +66,25 @@ const Contacts = [
 ]
 
 const ChatScreen = ({ navigation }) => {
+  useEffect(() => {
+    (async () => {
+      const { status } = await Contacts.requestPermissionsAsync();
+      if (status === 'granted') {
+        const { data } = await Contacts.getContactsAsync({
+          fields: [Contacts.Fields.PhoneNumbers],
+        });
+
+        console.log(Contacts.Fields)
+
+        if (data.length > 0) {
+          const contact = data[0];
+          // console.log(data);
+        }
+      }
+    })();
+  }, []);
+
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.searchBar}>
@@ -84,7 +105,7 @@ const ChatScreen = ({ navigation }) => {
           showsHorizontalScrollIndicator={false}
         >
           {
-            Contacts.map((item, index) => {
+            CONTACTS.map((item, index) => {
               if (item.active) {
                 return <Image key={index} source={item.image} style={styles.activeContactItem} />
               }
@@ -99,7 +120,7 @@ const ChatScreen = ({ navigation }) => {
 
         <View style={styles.messagesList}>
           {
-            Contacts.map((item, index) => {
+            CONTACTS.map((item, index) => {
               return <Contact key={index} data={item} navigation={navigation} />
             })
           }

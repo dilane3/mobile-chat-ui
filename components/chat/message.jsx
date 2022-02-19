@@ -5,7 +5,8 @@ const Message = ({ status, data }) => {
   const {
     image,
     text,
-    date
+    date,
+    images
   } = data
 
   return (
@@ -35,6 +36,16 @@ const Message = ({ status, data }) => {
             )
           }
         >{ text }</Text>
+
+        {
+          images && images.length > 0 && (
+            <Image
+              style={styles.messageImageContent}
+              source={{uri: images[0]}}
+            />
+          )
+        }
+
         <Text 
           style={
             status === "received" ? (
