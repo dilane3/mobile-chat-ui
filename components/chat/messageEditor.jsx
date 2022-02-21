@@ -27,6 +27,8 @@ const MessageEditor = () => {
     if (message.length > 0) {
       addMessage(message, image)
 
+      console.log(message)
+
       setMessage("")
       setImage(null)
     }
@@ -58,6 +60,7 @@ const MessageEditor = () => {
         value={message}
         onChangeText={text => setMessage(text)}
         selectionColor="#fff"
+        autoFocus
       />
 
       <Ionicons

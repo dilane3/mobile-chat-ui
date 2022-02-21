@@ -10,6 +10,7 @@ const ProfilScreen = () => {
   const [currentPosition, setCurrentPosition] = useState(0)
   const [duration, setDuration] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [ended, setEnded] = useState(true)
 
 
   const playSound = async (st = null, pos = null) => {
@@ -25,6 +26,7 @@ const ProfilScreen = () => {
           await sound.setPositionAsync(currentPosition * duration * 1000)
 
         setIsPlaying(true)
+        setEnded(false)
       } catch (err) {
         console.log(err)
       }
@@ -69,10 +71,22 @@ const ProfilScreen = () => {
       : undefined;
   }, [sound]);
 
+  useEffect(async () => {
+    if (isPlaying && ended) {
+      await sound.setPositionAsync(0)
+    }
+  }, [isPlaying, ended])
+
   useEffect(() => {
     let timer = null
 
     if (isPlaying) {
+      if (currentPosition*duration >= duration) {
+        setIsPlaying(false)
+        setCurrentPosition(0)
+        setEnded(true)
+      }
+
       timer = setInterval(() => {
         setCurrentPosition(state => (state) + 1/duration)
       }, 1000)
@@ -113,7 +127,7 @@ const ProfilScreen = () => {
             setCurrentPosition(value)
           }}
           onSlidingStart={(value) => {
-            playSound(true)
+            // playSound(true)
           }}
           onSlidingComplete={(value) => {
             setCurrentPosition(value)
@@ -121,7 +135,7 @@ const ProfilScreen = () => {
           }}
         />
 
-          <Text style={styles.audioDuration}>{formatDuration()}</Text>
+        <Text style={styles.audioDuration}>{formatDuration()}</Text>
       </View>
     </View>
   )
