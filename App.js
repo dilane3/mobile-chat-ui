@@ -30,7 +30,28 @@ export default function App() {
       text: value,
       date: `${date.getHours()}:${date.getMinutes()}`,
       status: "sended",
-      images: image ? [image]:null
+      images: image ? [image]:null,
+      type: "text"
+    }
+
+    const messagesClone = [...messages]
+
+    messagesClone.push(newMessage)
+
+    setMessages(messagesClone)
+  }
+
+  const handleAddVoiceMessage = (audio) => {
+    const id = messages.length === 0 ? 1:messages[messages.length-1].id+1
+    const date = new Date()
+
+    const newMessage = {
+      id,
+      image: require("./assets/images/montagne2.jpg"),
+      audio,
+      date: `${date.getHours()}:${date.getMinutes()}`,
+      status: "sended",
+      type: "voice"
     }
 
     const messagesClone = [...messages]
@@ -52,7 +73,8 @@ export default function App() {
 
   const messageContextValue = {
     messages,
-    addMessage: (value, image) => handleAddMessage(value, image)
+    addMessage: (value, image) => handleAddMessage(value, image),
+    addVoiceMessage: (audio) => handleAddVoiceMessage(audio)
   }
 
   return (

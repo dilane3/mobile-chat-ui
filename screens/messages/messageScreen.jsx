@@ -79,7 +79,7 @@ const Messages = {
 const voiceMessage = {
   image: require("../../assets/images/femme2.jpg"),
   date: "10:23",
-  audio: null
+  audio: "audio.mp3"
 }
 
 const MessageScreen = ({ navigation }) => {
@@ -90,12 +90,19 @@ const MessageScreen = ({ navigation }) => {
       <ConversationHeader navigation={navigation} data={Messages.contact} />
 
       <View style={{...styles.conversationContent}}>
-        <VoiceMessage data={voiceMessage} />
         <FlatList
           data={messages}
           keyExtractor={(item, index) => index}
           renderItem={({item}) => {
-            return <Message status={item.status} data={item} />
+            let component = null
+
+            if (item.type === "text") {
+              component = <Message status={item.status} data={item} />
+            } else {
+              component = <VoiceMessage data={item} />
+            }
+
+            return component
           }}
         />
       </View>

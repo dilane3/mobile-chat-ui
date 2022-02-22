@@ -165,6 +165,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     zIndex: 5
   },
+  voiceRecorderTimer: {
+    color: "#fff",
+    fontSize: 16,
+    fontFamily: "Poppins-Regular",
+    marginTop: 3
+  },
   // Voice message
   audioContainer: {
     minWidth: 100,
