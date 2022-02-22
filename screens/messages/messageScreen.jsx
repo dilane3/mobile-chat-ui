@@ -3,6 +3,7 @@ import { useContext, useState } from "react"
 import { FlatList, Image, View } from "react-native"
 import ConversationHeader from "../../components/chat/conversationHeader"
 import Message from "../../components/chat/message"
+import VoiceMessage from "../../components/chat/voiceMessage"
 import messageContext from "../../data-manager/context/messageContext"
 import styles from "./style"
 
@@ -75,6 +76,12 @@ const Messages = {
   ]
 }
 
+const voiceMessage = {
+  image: require("../../assets/images/femme2.jpg"),
+  date: "10:23",
+  audio: null
+}
+
 const MessageScreen = ({ navigation }) => {
   const { messages } = useContext(messageContext)
   
@@ -83,6 +90,7 @@ const MessageScreen = ({ navigation }) => {
       <ConversationHeader navigation={navigation} data={Messages.contact} />
 
       <View style={{...styles.conversationContent}}>
+        <VoiceMessage data={voiceMessage} />
         <FlatList
           data={messages}
           keyExtractor={(item, index) => index}

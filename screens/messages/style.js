@@ -164,6 +164,33 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
     textAlign: "center",
     zIndex: 5
+  },
+  // Voice message
+  audioContainer: {
+    minWidth: 100,
+    maxWidth: Dimensions.get("screen").width - 90,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    borderBottomLeftRadius: 10,
+    backgroundColor: "#fff",
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#7400db",
+    marginRight: 10
+  },
+  audioTracker: {
+    width: Dimensions.get("window").width - 130,
+    height: 20
+  },
+  audioDuration: {
+    position: "absolute",
+    bottom: 8,
+    right: 20,
+    fontSize: 12,
+    fontFamily: "Poppins-Regular",
+    color: "#f6f6f6"
   }
 })
 
