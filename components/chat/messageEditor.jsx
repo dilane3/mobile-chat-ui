@@ -11,7 +11,7 @@ const MessageEditor = () => {
   const [message, setMessage] = useState("")
   const [image, setImage] = useState(null)
   const [isRecording, setIsRecording] = useState(false)
-  const [recording, setRecording] = useState();
+  const [recording, setRecording] = useState(null);
   const [recordingTime, setRecordingTime] = useState(0)
 
   // Get data from global state
@@ -32,41 +32,74 @@ const MessageEditor = () => {
     return () => clearInterval(timer)
   }, [isRecording])
 
-  async function startRecording() {
+  const startRecording = async () => {
+    // Audio.requestPermissionsAsync()
+    // .then(() => {
+    //   Audio.setAudioModeAsync({
+    //     allowsRecordingIOS: true,
+    //     playsInSilentModeIOS: true,
+    //   })
+    //   .then(() => {
+    //     Audio.Recording.createAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY)
+    //     .then(({ recording }) => {
+    //       setRecording(recording);
+    //       setIsRecording(true)
+
+    //       console.log('Recording started');
+    //     })
+    //     .catch(err => {
+    //       console.error(err)
+    //     })
+    //   })
+    //   .catch(err => {
+    //     console.error(err)
+    //   })
+    // })
+    // .catch(err => {
+    //   console.error(err)
+    // })
+
+
+
     try {
       console.log('Requesting permissions..');
       await Audio.requestPermissionsAsync();
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
+        staysActiveInBackground: true
       }); 
       console.log('Starting recording..');
-
-      setIsRecording(true)
 
       const { recording } = await Audio.Recording.createAsync(
          Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
       );
       setRecording(recording);
+      setIsRecording(true)
+
       console.log('Recording started');
     } catch (err) {
       console.error('Failed to start recording', err);
     }
   }
 
-  async function stopRecording(action) {
+  const stopRecording = async (action) => {
     console.log('Stopping recording..');
-    // setRecording(undefined);
-    await recording.stopAndUnloadAsync();
 
-    if (action === "send") {
-      const uri = recording.getURI();
-
-      addVoiceMessage(uri)
+    try {
+      await recording.stopAndUnloadAsync();
+  
+      if (action === "send") {
+        const uri = recording.getURI();
+  
+        addVoiceMessage(uri)
+      }
+  
+      setIsRecording(false)
+      setRecordingTime(0)
+    } catch (err) {
+      console.error(err)
     }
-
-    setIsRecording(false)
-    setRecordingTime(0)
   }
 
   const ChangeIcon = () => {
@@ -154,7 +187,7 @@ const MessageEditor = () => {
               name={ChangeIcon()} 
               size={25} 
               color="#fff"synthetic event
-              onPress={async () => await handleSendMessage()} 
+              onPress={async () => {await handleSendMessage()}} 
             />
           </>
         ):(
@@ -166,14 +199,14 @@ const MessageEditor = () => {
               name="close" 
               size={25} 
               color="#fff"synthetic event
-              onPress={async () => await stopRecording("close")} 
+              onPress={async () => {await stopRecording("close")}} 
             />
             <Ionicons
               style={styles.messageEditorIconFirst} 
               name="send" 
               size={25} 
               color="#fff"synthetic event
-              onPress={async () => await stopRecording("send")} 
+              onPress={async () => {await stopRecording("send")}} 
             />
           </View>
         )
