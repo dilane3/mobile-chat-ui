@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar"
 import { useContext, useEffect, useRef, useState } from "react"
-import { FlatList, Image, View } from "react-native"
+import { Animated, Easing, FlatList, Image, PanResponder, View } from "react-native"
 import ConversationHeader from "../../components/chat/conversationHeader"
 import Message from "../../components/chat/message"
 import VoiceMessage from "../../components/chat/voiceMessage"
@@ -85,6 +85,31 @@ const voiceMessage = {
 const MessageScreen = ({ navigation }) => {
   const { messages } = useContext(messageContext)
   const scrollViewRef = useRef()
+  const pan = useRef(new Animated.ValueXY({x: 0, y: 0})).current
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (event, gestureState) => {
+        const allTouches = event.nativeEvent.changedTouches.length
+
+        if (allTouches === 1) {
+          pan.setValue({
+            x: gestureState.dx,
+            y: gestureState.dy
+          })
+        }
+      },
+      onPanResponderRelease: () => {
+        Animated.timing(pan, {
+          toValue: {x: 0, y: 0},
+          duration: 400,
+          easing: Easing.bounce,
+          useNativeDriver: true
+        }).start()
+      },
+      useNativeDriver: true
+    })
+  ).current
 
   useEffect(() => {
     scrollViewRef.current.scrollToEnd({ animated: true })
@@ -94,7 +119,23 @@ const MessageScreen = ({ navigation }) => {
     <View style={styles.container}>
       <ConversationHeader navigation={navigation} data={Messages.contact} />
 
-      <View style={{...styles.conversationContent}}>
+      <Animated.View 
+        style={[
+          styles.conversationContent,
+          {
+            transform: [
+              {
+                translateY: pan.y.interpolate({
+                  inputRange: [0, 100],
+                  outputRange: [0, 100],
+                  extrapolate: "clamp"
+                })
+              }
+            ]
+          }
+       ]}  
+      //  {...panResponder.panHandlers}
+      >
         <FlatList
           ref={scrollViewRef}
           data={messages}
@@ -111,7 +152,7 @@ const MessageScreen = ({ navigation }) => {
             return component
           }}
         />
-      </View>
+      </Animated.View>
       
       <StatusBar style="black" />
     </View>
