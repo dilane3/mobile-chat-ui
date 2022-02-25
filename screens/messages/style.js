@@ -132,22 +132,26 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     flexDirection: "row",
   },
-  messageInput: {
+  messageInputContainer: {
     width: "100%",
+    paddingRight: 100,
+    backgroundColor: "#7400db",
+    borderRadius: 20,
+  },
+  messageInput: {
     minHeight: 50,
     maxHeight: 100,
-    borderRadius: 20,
     color: "#fff",
-    backgroundColor: "#7400db",
     fontSize: 14,
     fontFamily: "Poppins-Medium",
     paddingVertical: 10,
     paddingHorizontal: 20,
-    paddingRight: 100 
+    // borderColor: "black",
+    // borderWidth: 2
   },
   messageEditorIconSecond: {
     position: "absolute",
-    right: 50,
+    right: 60,
     bottom: 0,
     height: 50,
     width: 40,
@@ -169,7 +173,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontFamily: "Poppins-Regular",
-    marginTop: 3
+    marginTop: 13,
+    marginLeft: 15
   },
   // Voice message
   audioContainer: {

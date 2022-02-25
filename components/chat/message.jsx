@@ -1,4 +1,5 @@
-import { Image, View, Text } from "react-native"
+import { useEffect, useRef } from 'react'
+import { Animated, Dimensions, Image, View, Text } from "react-native"
 import styles from "../../screens/messages/style"
 
 const Message = ({ status, data }) => {
@@ -9,8 +10,40 @@ const Message = ({ status, data }) => {
     images
   } = data
 
+  const {
+    width: windowWidth, 
+    height: windowHeight
+  } = Dimensions.get("window")
+
+  const pos = useRef(new Animated.ValueXY({x: windowWidth - 20, y: windowHeight - 80})).current
+
+  useEffect(() => {
+    Animated.spring(pos, {
+      toValue: {x: 0, y: 0},
+      useNativeDriver: true
+    }).start()
+  }, [])
+
   return (
-    <View style={status === "received" ? styles.messageContainerReceived:styles.messageContainerSended}>
+    <Animated.View 
+      style={
+        status === "received" ? (
+          styles.messageContainerReceived
+        ):([
+          styles.messageContainerSended,
+          {
+            transform: [
+              {
+                translateX: pos.x
+              },
+              {
+                translateY: pos.y
+              }
+            ]
+          }
+        ])
+      }
+    >
       <Image style={styles.messageImage} source={image} />
     
       <View 
@@ -58,7 +91,7 @@ const Message = ({ status, data }) => {
           }
         >{ date }</Text>
       </View>
-    </View>
+    </Animated.View>
   )
 }
 

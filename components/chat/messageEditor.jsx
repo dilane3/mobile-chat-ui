@@ -1,7 +1,7 @@
-import { View, Text, TextInput } from 'react-native'
+import { View, Text, TextInput, Animated, PanResponder } from 'react-native'
 import styles from '../../screens/messages/style'
 import { Ionicons } from '@expo/vector-icons'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
 import messageContext from '../../data-manager/context/messageContext'
 import { Audio } from 'expo-av'
@@ -17,6 +17,58 @@ const MessageEditor = () => {
   // Get data from global state
   // const { changeImage } = useContext(imageContext)
   const { addMessage, addVoiceMessage } = useContext(messageContext)
+
+  // UseRef section
+  const scale = useRef(new Animated.Value(1)).current
+  const scale2 = useRef(new Animated.Value(1)).current
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderStart: (event) => {
+        if (message.length === 0) {
+          Animated.sequence([
+            Animated.parallel(
+              [
+                Animated.timing(scale, {
+                  toValue: 1.5,
+                  duration: 300,
+                  useNativeDriver: true
+                }),
+                Animated.timing(scale2, {
+                  toValue: 1.5,
+                  duration: 300,
+                  useNativeDriver: true
+                })
+              ]
+            ),
+            Animated.loop(
+              Animated.timing(scale2, {
+                toValue: 3,
+                duration: 1000,
+                useNativeDriver: true
+              })
+            )
+          ]).start(async () => {
+            await startRecording()
+          })
+        }
+      },
+      onPanResponderRelease: () => {
+        Animated.parallel(
+          [
+            Animated.spring(scale, {
+              toValue: 1,
+              useNativeDriver: true
+            }),
+            Animated.spring(scale2, {
+              toValue: 1,
+              useNativeDriver: true
+            })
+          ]
+        ).start()
+      }
+    })
+  ).current
 
   // UseEffect section
 
@@ -110,7 +162,7 @@ const MessageEditor = () => {
     return "mic-sharp"
   }
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = () => {
     if (message.length > 0) {
       addMessage(message, image)
 
@@ -118,12 +170,6 @@ const MessageEditor = () => {
 
       setMessage("")
       setImage(null)
-    } else {
-      try {
-        await startRecording()
-      } catch (err) {
-        console.error(err)
-      }
     }
   }
 
@@ -163,7 +209,7 @@ const MessageEditor = () => {
     <View style={styles.messageEditor}>
       {
         !isRecording ? (
-          <>
+          <View style={styles.messageInputContainer}>
             <TextInput 
               multiline
               placeholder='Type a message'
@@ -182,16 +228,55 @@ const MessageEditor = () => {
               color="#fff" 
               onPress={pickImage}  
             />
+
+            <Animated.View
+              style={[
+                styles.messageEditorIconFirst,
+                {
+                  transform: [
+                    {scale}
+                  ],
+                  bottom: 5,
+                  backgroundColor: "#7400db",
+                  borderRadius: 100,
+                  width: 40,
+                  height: 40,
+                }
+              ]} 
+            />
+            <Animated.View
+              style={[
+                styles.messageEditorIconFirst,
+                {
+                  transform: [
+                    {
+                      scale: scale2
+                    }
+                  ],
+                  bottom: 5,
+                  backgroundColor: "#7400db",
+                  borderRadius: 100,
+                  width: 40,
+                  height: 40,
+                  opacity: scale2.interpolate({
+                    inputRange: [1.5, 2],
+                    outputRange: [1, 0],
+                    extrapolate: "clamp"
+                  })
+                }
+              ]} 
+            />
             <Ionicons
               style={styles.messageEditorIconFirst} 
               name={ChangeIcon()} 
               size={25} 
               color="#fff"synthetic event
-              onPress={async () => {await handleSendMessage()}} 
+              onPress={handleSendMessage}
+              // {...panResponder.panHandlers} 
             />
-          </>
+          </View>
         ):(
-          <View style={styles.messageInput}>
+          <View style={styles.messageInputContainer}>
             <Text style={styles.voiceRecorderTimer}>{ formatDuration() }</Text>
 
             <Ionicons

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { FlatList, Image, View } from "react-native"
 import ConversationHeader from "../../components/chat/conversationHeader"
 import Message from "../../components/chat/message"
@@ -84,6 +84,11 @@ const voiceMessage = {
 
 const MessageScreen = ({ navigation }) => {
   const { messages } = useContext(messageContext)
+  const scrollViewRef = useRef()
+
+  useEffect(() => {
+    scrollViewRef.current.scrollToEnd({ animated: true })
+  }, [messages])
   
   return (
     <View style={styles.container}>
@@ -91,6 +96,7 @@ const MessageScreen = ({ navigation }) => {
 
       <View style={{...styles.conversationContent}}>
         <FlatList
+          ref={scrollViewRef}
           data={messages}
           keyExtractor={(item, index) => index}
           renderItem={({item}) => {
