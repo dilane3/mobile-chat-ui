@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import TabNavigator from './navigations/tabNavigator';
@@ -82,11 +83,9 @@ export default function App() {
       <imageContext.Provider value={imageContextValue}>
         <messageContext.Provider value={messageContextValue}>
           <NavigationContainer>
-
             {
               fontLoaded ? <TabNavigator />:null
             }
-
             <StatusBar style='auto' />
           </NavigationContainer>
         </messageContext.Provider>
