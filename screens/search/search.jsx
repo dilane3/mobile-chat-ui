@@ -17,7 +17,8 @@ import Animated, {
   withTiming,
   useAnimatedGestureHandler,
   withSpring,
-  interpolate
+  interpolate,
+  runOnJS
 } from "react-native-reanimated"
 
 const SearchScreen = () => {
@@ -54,7 +55,10 @@ const SearchScreen = () => {
         "clamp"
       ),
       transform: [
-        {translateX: visible ? 0 : -dimensions.width}
+        {translateX: interpolate(top.value, 
+            [MIDDLE, HEIGHT],
+            [1, 0]
+          ) > 0 ? 0 : -dimensions.width}
       ]
     }
   })
@@ -67,16 +71,14 @@ const SearchScreen = () => {
       top.value = context.startTop + event.translationY
     },
     onEnd: () => {
+      'Worklet';
+
       if (top.value > MIDDLE + 100) {
-        top.value = withTiming(HEIGHT, { duration: 300 }, () => {
-          setVisible(false)
-        })
+        top.value = withTiming(HEIGHT, { duration: 300 })
       } else {
-        top.value = withTiming(MIDDLE, { duration: 300 }, () => {
-          setVisible(true)
-        })
+        top.value = withTiming(MIDDLE, { duration: 300 })
       }
-    }
+    },
   })
 
   return (
@@ -101,6 +103,39 @@ const SearchScreen = () => {
             ]}
           >
             <View style={styles.sheetIndicator} />
+
+            <TouchableOpacity
+              style={styles.btn}
+              activeOpacity={.8}
+              onPress={() => {
+                top.value = withTiming(MIDDLE, {duration: 500})
+                setVisible(true)
+              }}
+            >
+              <Text style={styles.btnText}>Profil</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.btn}
+              activeOpacity={.8}
+              onPress={() => {
+                top.value = withTiming(MIDDLE, {duration: 500})
+                setVisible(true)
+              }}
+            >
+              <Text style={styles.btnText}>Notification</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.btn}
+              activeOpacity={.8}
+              onPress={() => {
+                top.value = withTiming(MIDDLE, {duration: 500})
+                setVisible(true)
+              }}
+            >
+              <Text style={styles.btnText}>Setting</Text>
+            </TouchableOpacity>
           </Animated.View>
         </PanGestureHandler>
 
@@ -137,7 +172,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#3e4bff",
     paddingHorizontal: 20,
     paddingVertical: 10,
-    justifyContent: "center" 
+    justifyContent: "center",
+    alignItems: "center" 
   },
   btnText: {
     color: "#fff",
@@ -154,9 +190,8 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     backgroundColor: "#fff",
     elevation: 1,
-    borderTopWidth: 1,
-    borderTopColor: "#eee",
-    zIndex: 5
+    zIndex: 5,
+    padding: 20,
   },
   sheetIndicator: {
     position: "absolute",
