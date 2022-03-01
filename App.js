@@ -7,6 +7,8 @@ import navigationContext from './data-manager/context/navigationContext';
 import imageContext from './data-manager/context/imageContext';
 import messageContext from './data-manager/context/messageContext';
 import { useState } from 'react';
+import BottomHalfModal from './components/navigations/bottomHalfModal';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function App() {
   const [fontLoaded] = useFonts({
@@ -20,6 +22,8 @@ export default function App() {
   const [activeScreen, setActiveScreen] = useState(null)
   const [image, setImage] = useState(null)
   const [messages, setMessages] = useState([])
+  const [modalVisible, setModalVisible] = useState(false)
+
 
   const handleAddMessage = (value, image) => {
     const id = messages.length === 0 ? 1:messages[messages.length-1].id+1
@@ -64,7 +68,9 @@ export default function App() {
 
   const navigationContextValue = {
     activeScreen,
-    changeActiveScreen: (screenname) => setActiveScreen(screenname)
+    modalVisible,
+    changeActiveScreen: (screenname) => setActiveScreen(screenname),
+    changeModalVisible: (value) => setModalVisible(value)
   }
 
   const imageContextValue = {
@@ -82,12 +88,16 @@ export default function App() {
     <navigationContext.Provider value={navigationContextValue}>
       <imageContext.Provider value={imageContextValue}>
         <messageContext.Provider value={messageContextValue}>
-          <NavigationContainer>
-            {
-              fontLoaded ? <TabNavigator />:null
-            }
-            <StatusBar style='auto' />
-          </NavigationContainer>
+          <GestureHandlerRootView style={{flex: 1}}>
+            <NavigationContainer>
+              {
+                fontLoaded ? <TabNavigator />:null
+              }
+              <StatusBar style='auto' />
+            </NavigationContainer>
+
+            <BottomHalfModal />
+          </GestureHandlerRootView>
         </messageContext.Provider>
       </imageContext.Provider>
     </navigationContext.Provider>

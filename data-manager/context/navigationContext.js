@@ -2,7 +2,9 @@ import { createContext } from "react"
 
 const navigationContext = createContext({
   activeScreen: "",
-  changeActiveScreen: (screenname) => {}
+  modalVisible: false,
+  changeActiveScreen: (screenname) => {},
+  changeModalVisible: (value) => {}
 })
 
 export default navigationContext
